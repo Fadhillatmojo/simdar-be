@@ -67,7 +67,7 @@ class DonorsController extends Controller
     {
         try {
             $donor = Donor::all();
-            return response()->json($donor);
+            return response()->json(["anjay"=> "anjay"], 404);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
