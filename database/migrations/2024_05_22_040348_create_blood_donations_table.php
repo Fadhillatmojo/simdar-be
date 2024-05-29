@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blood_stocks', function (Blueprint $table) {
-            $table->id('stock_id');
-            $table->foreignId('donation_id')->constrained('blood_donations');
-            $table->foreignId('hf_id')->constrained('health_facilities');
-            $table->date('entry_date');
+        Schema::create('blood_donations', function (Blueprint $table) {
+            $table->id('donation_id');
+            $table->foreignId('hf_id')->references('hf_id')->on('health_facilities');
+            $table->foreignId('donor_id')->references('donor_id')->on('donors');
+            $table->date('donor_date');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blood_stocks');
+        Schema::dropIfExists('blood_donations');
     }
 };

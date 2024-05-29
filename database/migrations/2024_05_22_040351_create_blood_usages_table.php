@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('blood_usage', function (Blueprint $table) {
             $table->id('usage_id');
-            $table->foreignId('requester_donor_id')->constrained('donors');
-            $table->foreignId('stock_id')->constrained('blood_stock');
-            $table->foreignId('hf_id')->constrained('health_facilities');
+            $table->foreignId('requester_donor_id')->references('donor_id')->on('donors');
+            $table->foreignId('stock_id')->references('stock_id')->on('blood_stocks');
+            $table->foreignId('hf_id')->references('hf_id')->on('health_facilities');
             $table->string('purpose', 255);
             $table->date('date');
             $table->timestamps();
