@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('donors', function (Blueprint $table) {
-            $table->id('donor_id');
+            $table->id();
             $table->string('name', 255);
             $table->enum('gender', ['L', 'P']);
             $table->enum('blood_type', ['A', 'B', 'AB', 'O']);

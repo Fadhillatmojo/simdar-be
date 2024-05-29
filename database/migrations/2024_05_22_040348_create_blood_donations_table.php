@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('blood_donations', function (Blueprint $table) {
-            $table->id('donation_id');
-            $table->foreignId('hf_id')->references('hf_id')->on('health_facilities');
-            $table->foreignId('donor_id')->references('donor_id')->on('donors');
+            $table->id();
+            $table->foreignId('hf_id')->references('id')->on('health_facilities');
+            $table->foreignId('donor_id')->references('id')->on('donors');
             $table->date('donor_date');
             $table->timestamps();
         });

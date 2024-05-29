@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('blood_requests', function (Blueprint $table) {
-            $table->id('request_id');
-            $table->foreignId('requester_hf_id')->references('hf_id')->on('health_facilities');
-            $table->foreignId('responder_hf_id')->references('hf_id')->on('health_facilities');
-            $table->foreignId('responder_donor_id')->references('donor_id')->on('donors');
+            $table->id();
+            $table->foreignId('requester_hf_id')->references('id')->on('health_facilities');
+            $table->foreignId('responder_hf_id')->references('id')->on('health_facilities');
+            $table->foreignId('responder_donor_id')->references('id')->on('donors');
             $table->integer('quantity');
             $table->enum('status', ['accepted', 'rejected', 'deleted', 'pending'])->default('pending');
             $table->string('purpose', 255);
