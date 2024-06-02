@@ -31,7 +31,7 @@ class DonorsController extends Controller
     public function getDonorById($id)
     {
         try {
-            $donor = Donor::where('donor_id', $id)->get();
+            $donor = Donor::where('id', $id)->get();
             return response()->json($donor);
         } catch (Exception $e) {
             return response()->json([
@@ -45,6 +45,7 @@ class DonorsController extends Controller
     {
         try {
             $donor = new Donor;
+            $donor->id = $request->nik;
             $donor->name = $request->name;
             $donor->gender = $request->gender;
             $donor->blood_type = $request->blood_type;
@@ -53,7 +54,6 @@ class DonorsController extends Controller
             $donor->address = $request->address;
             $donor->phone_number = $request->phone_number;
             $donor->save();
-
             return response()->json($donor);
         } catch (Exception $e) {
             return response()->json([
@@ -63,16 +63,4 @@ class DonorsController extends Controller
         }
     }
 
-    public function getDonorsAll()
-    {
-        try {
-            $donor = Donor::all();
-            return response()->json(["anjay"=> "anjay"], 404);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 404);
-        }
-    }
 }

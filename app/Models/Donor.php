@@ -62,4 +62,6 @@ class Donor extends Model
 	{
 		return $this->hasMany(BloodUsage::class, 'requester_donor_id');
 	}
+
+	
 }

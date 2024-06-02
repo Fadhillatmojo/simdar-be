@@ -18,8 +18,9 @@ class StockController extends Controller
         $stock = BloodStock::where('hf_id', $id)->get();
         return response()->json($stock);
     }
+
     public function getSelfStock(){
-        $stock = BloodStock::where('hf_id', auth()->user()->hf_id)->get();
+        $stock = BloodStock::where('hf_id', auth()->user()->id)->get();
         return response()->json($stock);
     }
 
