@@ -10,13 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\HealthFacility as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class HealthFacility
- * 
+ *
  * @property int $id
  * @property string $name
  * @property string $address
@@ -25,7 +25,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Collection|BloodDonation[] $blood_donations
  * @property Collection|BloodRequest[] $blood_requests
  * @property Collection|BloodStock[] $blood_stocks
