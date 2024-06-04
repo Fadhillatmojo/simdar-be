@@ -9,6 +9,7 @@ use App\Http\Controllers\DonorsController;
 use App\Models\BloodDonation;
 use App\Http\Controllers\BloodUsageController;
 use App\Http\Controllers\BloodRequestController;
+use App\Http\Controllers\HealthFacilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::middleware(['auth:sanctum'])->group(
     function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/faskes', [AuthController::class, 'getFaskes']);
+        Route::get('/faskes/{faskesid}', [HealthFacilityController::class, 'getOtherFaskes']);
+
         Route::get('/darah', [StockController::class, 'getAllStock']);
         Route::get('/darah/{id}', [StockController::class, 'getStockById']);
         Route::get('/darah/faskes', [StockController::class, 'getSelfStock']);
@@ -37,7 +40,8 @@ Route::middleware(['auth:sanctum'])->group(
         Route::post('/pakai-stok', [BloodUsageController::class, 'usage']);
         Route::get('/riwayat-pakai', [BloodUsageController::class, 'list']);
 
-        Route::post('/minta-darah', [BloodRequestController::class, 'request']);
+        Route::get('/darah/{id}/minta-darah', [BloodRequestController::class, 'get']);
+        Route::post('/darah/{id}/minta-darah', [BloodRequestController::class, 'request']);
     }
 );
 Route::post('/register', [AuthController::class, 'register']);
