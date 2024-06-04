@@ -24,6 +24,7 @@ use App\Http\Controllers\BloodRequestController;
 Route::middleware(['auth:sanctum'])->group(
     function () {
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/faskes', [AuthController::class, 'getFaskes']);
         Route::get('/darah', [StockController::class, 'getAllStock']);
         Route::get('/darah/{id}', [StockController::class, 'getStockById']);
         Route::get('/darah/faskes', [StockController::class, 'getSelfStock']);
