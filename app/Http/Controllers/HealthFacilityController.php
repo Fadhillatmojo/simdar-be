@@ -29,7 +29,7 @@ class HealthFacilityController extends Controller
             ]);
         }
     }
-    public function getOtherFaskes(String $id)
+    public function showFaskes(String $id)
     {
         try {
             $faskes_lain = HealthFacility::findOrFail($id);
@@ -53,26 +53,7 @@ class HealthFacilityController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreHealthFacilityRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(HealthFacility $healthFacility)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

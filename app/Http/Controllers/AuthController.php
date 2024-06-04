@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
 {
@@ -96,5 +97,42 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function updateFaskes(Request $request)
+    {
+        try {
+            $user_id = auth()->user()->id;
+            $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'address' => 'sometimes|string',
+                'phone_number' => 'sometimes|string',
+                'email' => 'sometimes|string|email|max:255|unique:health_facilities'
+            ]);
+            $faskes = HealthFacility::findOrFail($user_id);
+            // Ambil semua data request kecuali '_method' dan '_token'
+            $data = $request->except(['_method', '_token']);
+            // Filter atribut yang kosong
+            $filteredData = array_filter($data, function ($value) {
+                return !is_null($value) && $value !== '';
+            });
+            // Update hanya atribut yang diisi
+            $faskes->update($filteredData);
+
+            return response()->json([
+                'status' => "Success",
+                'message' => "Data Faskesmu Berhasil Di Update"
+            ], 500);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => "error",
+                'message' => "Faskes Tidak Ditemukan"
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+
     }
 }
