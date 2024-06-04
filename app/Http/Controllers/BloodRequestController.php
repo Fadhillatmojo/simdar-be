@@ -51,19 +51,11 @@ class BloodRequestController extends Controller
     public function accept(String $id)
     {
         try {
-            // Validasi data yang masuk
-            // $request->validate([
-            //     'status' => 'required|in:accepted,deleted',
-            // ]);
             $blood_request = BloodRequest::findOrFail($id);
             // Perbarui status
             $blood_request->status = 'accepted';
             $blood_request->save();
-            // if ($request->status === 'accepted') {
-            //     // Temukan BloodRequest berdasarkan ID
 
-
-            // }
             return response()->json(['message' => 'Blood Request diterima'], 200);
 
         }  catch (ModelNotFoundException $e) {
