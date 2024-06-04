@@ -40,8 +40,8 @@ Route::middleware(['auth:sanctum'])->group(
         Route::post('/pakai-stok', [BloodUsageController::class, 'usage']);
         Route::get('/riwayat-pakai', [BloodUsageController::class, 'list']);
 
-        Route::get('/darah/{id}/minta-darah', [BloodRequestController::class, 'get']);
-        Route::post('/darah/{id}/minta-darah', [BloodRequestController::class, 'request']);
+        Route::get('/all-faskes', [HealthFacilityController::class, 'index']);
+        Route::post('/minta-darah', [BloodRequestController::class, 'request']);
     }
 );
 Route::post('/register', [AuthController::class, 'register']);

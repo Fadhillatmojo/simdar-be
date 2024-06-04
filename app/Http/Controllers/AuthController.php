@@ -87,7 +87,7 @@ class AuthController extends Controller
             $user = $request->user();
             return response()->json([
                 'status' => 'Success',
-                'message' => 'data berhasil terambil',
+                'message' => 'Data berhasil terambil',
                 'data' => $user
             ], 200);
 

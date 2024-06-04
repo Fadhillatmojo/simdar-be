@@ -2,52 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Carbon\Carbon;
 use App\Models\BloodRequest;
+use Illuminate\Http\Request;
+use App\Http\Resources\SuccessUploadResource;
 use App\Http\Requests\StoreBloodRequestRequest;
 use App\Http\Requests\UpdateBloodRequestRequest;
-use Illuminate\Http\Request;
 
 class BloodRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function request(Request $request)
     {
-        // $request->validate([
-        //     'requester_hf_id' => 'required',
-        //     'responder_hf_id' => 'required',
-        //     'responder_donor_id' => 'required',
-        //     'quantity' => 'required',
-        //     'purpose' => 'required',
-        // ]);
+        $user_id = auth()->user()->id;
 
-        // $bloodRequest = new BloodRequest();
-        // $bloodRequest->requester_hf_id = auth()->user()->id;
-        // $bloodRequest->responder_hf_id = $request->responder_hf_id;
-        // $bloodRequest->responder_donor_id = $request->responder_donor_id;
-        // $bloodRequest->quantity = $request->quantity;
-        // $bloodRequest->purpose = $request->purpose;
-        // $bloodRequest->request_date = now();
-        // $bloodRequest->status = 'pending';
-        // $bloodRequest->save();
+        $request->validate([
+            // 'requester_hf_id' => 'required',
+            'responder_hf_id' => 'required',
+            'responder_donor_id' => 'required',
+            'quantity' => 'required',
+            'purpose' => 'required',
+        ]);
 
-        // $data_request = BloodRequest::select(
-        //     'requester_hf_id', 
-        //     'responder_donor_id', 
-        //     'donors.rhesus_type', // Kolom rhesus_type dari tabel donors
-        //     'donors.blood_type', // Kolom blood_type dari tabel donors
-        //     'quantity', 
-        //     'purpose', 
-        //     'request_date', 
-        //     'status'
-        // )
-        // ->join('donors', 'blood_requests.responder_donor_id', '=', 'donors.id')
-        // ->where('blood_requests.id', $bloodRequest->id) // Menggunakan blood_requests.id
-        // ->first();
-    
+        BloodRequest::create([
+            'requester_hf_id' => $user_id,
+            'responder_hf_id' => $request->responder_hf_id,
+            'responder_donor_id' => $request->responder_donor_id,
+            'status' => 'pending',
+            'quantity' => $request->quantity,
+            'purpose' => $request->purpose,
+            'request_date' => Carbon::now()
+        ]);
 
-        // return response()->json($bloodRequest, 201);
+        return response()->json(new SuccessUploadResource(), 201);
     }
 
     /**

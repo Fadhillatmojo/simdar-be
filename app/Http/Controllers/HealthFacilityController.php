@@ -14,6 +14,21 @@ class HealthFacilityController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index()
+    {
+        try {
+            $all_faskes = HealthFacility::all();
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Data berhasil terambil',
+                'data' => $all_faskes
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
     public function getOtherFaskes(String $id)
     {
         try {
