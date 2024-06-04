@@ -18,27 +18,34 @@ class BloodRequestController extends Controller
 
     public function request(Request $request)
     {
-        $user_id = auth()->user()->id;
+        try {
+            $user_id = auth()->user()->id;
 
-        $request->validate([
-            // 'requester_hf_id' => 'required',
-            'responder_hf_id' => 'required',
-            'responder_donor_id' => 'required',
-            'quantity' => 'required',
-            'purpose' => 'required',
-        ]);
+            $request->validate([
+                // 'requester_hf_id' => 'required',
+                'responder_hf_id' => 'required',
+                'responder_donor_id' => 'required',
+                'quantity' => 'required',
+                'purpose' => 'required',
+            ]);
 
-        BloodRequest::create([
-            'requester_hf_id' => $user_id,
-            'responder_hf_id' => $request->responder_hf_id,
-            'responder_donor_id' => $request->responder_donor_id,
-            'status' => 'pending',
-            'quantity' => $request->quantity,
-            'purpose' => $request->purpose,
-            'request_date' => Carbon::now()
-        ]);
+            BloodRequest::create([
+                'requester_hf_id' => $user_id,
+                'responder_hf_id' => $request->responder_hf_id,
+                'responder_donor_id' => $request->responder_donor_id,
+                'status' => 'pending',
+                'quantity' => $request->quantity,
+                'purpose' => $request->purpose,
+                'request_date' => Carbon::now()
+            ]);
 
-        return response()->json(new SuccessUploadResource(), 201);
+            return response()->json(new SuccessUploadResource(), 201);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
