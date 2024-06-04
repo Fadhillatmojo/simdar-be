@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\SuccessUploadResource;
 use App\Http\Requests\StoreBloodRequestRequest;
 use App\Http\Requests\UpdateBloodRequestRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BloodRequestController extends Controller
 {
@@ -40,7 +41,6 @@ class BloodRequestController extends Controller
             ]);
 
             return response()->json(new SuccessUploadResource(), 201);
-
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -48,6 +48,55 @@ class BloodRequestController extends Controller
         }
     }
 
+    public function accept(String $id)
+    {
+        try {
+            // Validasi data yang masuk
+            // $request->validate([
+            //     'status' => 'required|in:accepted,deleted',
+            // ]);
+            $blood_request = BloodRequest::findOrFail($id);
+            // Perbarui status
+            $blood_request->status = 'accepted';
+            $blood_request->save();
+            // if ($request->status === 'accepted') {
+            //     // Temukan BloodRequest berdasarkan ID
+
+
+            // }
+            return response()->json(['message' => 'Blood Request diterima'], 200);
+
+        }  catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => "error",
+                'message' => "Blood Request Tidak Ditemukan"
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    public function reject(String $id)
+    {
+        try {
+            $blood_request = BloodRequest::findOrFail($id);
+            // Perbarui status
+            $blood_request->status = 'rejected';
+            $blood_request->save();
+            return response()->json(['message' => 'Blood Request ditolak'], 200);
+
+        }  catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => "error",
+                'message' => "Blood Request Tidak Ditemukan"
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -42,6 +42,8 @@ Route::middleware(['auth:sanctum'])->group(
 
         Route::get('/all-faskes', [HealthFacilityController::class, 'index']);
         Route::post('/minta-darah', [BloodRequestController::class, 'request']);
+        Route::post('/accept/{requestid}', [BloodRequestController::class, 'accept']);
+        Route::post('/reject/{requestid}', [BloodRequestController::class, 'reject']);
     }
 );
 Route::post('/register', [AuthController::class, 'register']);
