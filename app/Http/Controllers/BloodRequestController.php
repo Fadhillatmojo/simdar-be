@@ -16,6 +16,22 @@ class BloodRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index()
+    {
+        try {
+            $blood_requests = BloodRequest::all();
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Data berhasil terambil',
+                'data' => $blood_requests
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 
     public function request(Request $request)
     {
