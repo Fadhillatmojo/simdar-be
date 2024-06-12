@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
 {
@@ -70,88 +71,68 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        try {
+            $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
+            return response()->json(['message' => 'Logged out successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
+    public function getFaskes(Request $request)
+    {
+        try {
+            $user = $request->user();
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Data berhasil terambil',
+                'data' => $user
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateFaskes(Request $request)
+    {
+        try {
+            $user_id = auth()->user()->id;
+            $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'address' => 'sometimes|string',
+                'phone_number' => 'sometimes|string',
+                'email' => 'sometimes|string|email|max:255|unique:health_facilities'
+            ]);
+            $faskes = HealthFacility::findOrFail($user_id);
+            // Ambil semua data request kecuali '_method' dan '_token'
+            $data = $request->except(['_method', '_token']);
+            // Filter atribut yang kosong
+            $filteredData = array_filter($data, function ($value) {
+                return !is_null($value) && $value !== '';
+            });
+            // Update hanya atribut yang diisi
+            $faskes->update($filteredData);
+
+            return response()->json([
+                'status' => "Success",
+                'message' => "Data Faskesmu Berhasil Di Update"
+            ], 500);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => "error",
+                'message' => "Faskes Tidak Ditemukan"
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+
+    }
 }
-
-// class AuthController extends Controller
-// {
-//     /**
-//      * Display a listing of the resource.
-//      */
-//     public function index()
-//     {
-//         //
-//     }
-//     public function login(Request $request)
-//     {
-//         try {
-//             // validasi input
-//             $request->validate([
-//                 'email' => 'required',
-//                 'password' => 'required'
-//             ]);
-
-//             // Checking apakah usernya itu ada atau tidak
-//             $user = User::where('email', $request->email)->first();
-
-//             if (!$user) {
-//                 $user = User::where('username', $request->email)->first();
-//             }
-
-//             // Checking apakah usernya itu passwordnya bener atau salah, kalau salah, dia bakal throw exception
-//             if (!$user || !Hash::check($request->password, $user->password)) {
-//                 throw ValidationException::withMessages([
-//                     'email' => ['The provided credentials are incorrect.']
-//                 ]);
-//             }
-
-//             return $user->createToken($request->email)->plainTextToken;
-//         } catch (Exception $e) {
-//             return response()->json([
-//                 'error' => $e->getMessage()
-//             ]);
-//         }
-//     }
-//     public function registrasi(Request $request)
-//     {
-//         $validated = $request->validate([
-//             'hospital_id' => 'required',
-//             'username' => 'required|max:50',
-//             'alamat_email' => 'required|email',
-//             'password' => 'required|max:50',
-//         ]);
-
-//         try{
-//             $user = AdminHospital::create([
-//                 'username' => $validated['username'],
-//                 'email' => $validated['email'],
-//                 'hospital_id' => $validated['hospital_id'],
-//                 'password' => Hash::make($validated['password']),
-//             ]);
-//             return response()->json([
-//                 'username' => $user->username,
-//                 'status' => 'Success'
-//             ],200);
-//         }catch(Exception $e){
-//             return response()->json([
-//                 'error' => $e
-//             ],400);
-//         }
-//     }
-// }
-//     public function logout(Request $request)
-//     {
-//         try {
-//             $request->user()->currentAccessToken()->delete();
-//             return response()->json(['message' => 'Logout Success'], 200);
-//         } catch (Exception $e) {
-//             return response()->json([
-//                 "error" => $e->getMessage()
-//             ]);
-//         }
-//     }
-// }

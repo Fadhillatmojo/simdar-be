@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\Request;
 use App\Models\HealthFacility;
 use App\Http\Requests\StoreHealthFacilityRequest;
 use App\Http\Requests\UpdateHealthFacilityRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class HealthFacilityController extends Controller
 {
@@ -13,32 +16,44 @@ class HealthFacilityController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $all_faskes = HealthFacility::all();
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Data berhasil terambil',
+                'data' => $all_faskes
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    public function showFaskes(String $id)
+    {
+        try {
+            $faskes_lain = HealthFacility::findOrFail($id);
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Data berhasil terambil',
+                'data' => $faskes_lain
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => "error",
+                'message' => "Faskes Tidak Ditemukan"
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreHealthFacilityRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(HealthFacility $healthFacility)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
