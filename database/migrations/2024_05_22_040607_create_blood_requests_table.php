@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->enum('status', ['accepted', 'rejected', 'deleted', 'pending'])->default('pending');
             $table->string('purpose', 255);
+            $table->string('reason', 255)->nullable();
             $table->date('request_date');
             $table->date('confirmed_date')->nullable();
             $table->timestamps();
