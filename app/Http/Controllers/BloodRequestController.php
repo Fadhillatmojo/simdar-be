@@ -10,6 +10,7 @@ use App\Http\Resources\SuccessUploadResource;
 use App\Http\Requests\StoreBloodRequestRequest;
 use App\Http\Requests\UpdateBloodRequestRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\BloodUsage;
 
 class BloodRequestController extends Controller
 {
@@ -19,7 +20,7 @@ class BloodRequestController extends Controller
     public function index()
     {
         try {
-            $blood_requests = BloodRequest::all();
+            $blood_requests = BloodRequest::all(); //kasih id user yg login
             return response()->json([
                 'status' => 'Success',
                 'message' => 'Data berhasil terambil',
@@ -64,13 +65,31 @@ class BloodRequestController extends Controller
         }
     }
 
-    public function accept(String $id)
+    public function accept(String $id, Request $request)
     {
         try {
+            $request->validate([
+                'requester_donor_id' => 'required',
+                'stock_id' => 'required',
+                'purpose' => 'required',
+                'date' => 'required',
+            ]);
+    
             $blood_request = BloodRequest::findOrFail($id);
             // Perbarui status
             $blood_request->status = 'accepted';
             $blood_request->save();
+
+           
+            $bloodUsage = new BloodUsage();
+            $bloodUsage->hf_id = $blood_request->responder_hf_id;
+            $bloodUsage->requester_donor_id = $request->requester_donor_id;
+            $bloodUsage->stock_id = $request->stock_id;
+            $bloodUsage->purpose = $request->purpose;
+            $bloodUsage->date = $request->date;
+            $bloodUsage->save();
+    
+            return response()->json($bloodUsage, 201);
 
             return response()->json(['message' => 'Blood Request diterima'], 200);
 

@@ -11,8 +11,12 @@ class StockController extends Controller
     public function getAllStock()
     {
         try {
-            $stocks = BloodStock::all();
-            // percabangan kalau datanya kosongks
+            $stocks = BloodStock::select('blood_stocks.*', 'donors.blood_type', 'donors.rhesus_type')
+            ->join('blood_donations', 'blood_donations.id', '=', 'blood_stocks.donation_id')
+            ->join('donors', 'donors.id', '=', 'blood_donations.donor_id')
+            ->doesntHave('blood_usages')
+            ->get();
+                    // percabangan kalau datanya kosongks
             if ($stocks->isEmpty()) {
                 return response()->json([
                     'message' => 'Not found'

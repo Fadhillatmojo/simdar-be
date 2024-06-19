@@ -42,7 +42,7 @@ Route::middleware(['auth:sanctum'])->group(
         Route::get('/riwayat-pakai', [BloodUsageController::class, 'list']);
 
         Route::get('/all-faskes', [HealthFacilityController::class, 'index']);
-        Route::post('/all-request', [BloodRequestController::class, 'index']);
+        Route::get('/all-request', [BloodRequestController::class, 'index']);
         Route::post('/minta-darah', [BloodRequestController::class, 'request']);
         Route::post('/accept/{requestid}', [BloodRequestController::class, 'accept']);
         Route::post('/reject/{requestid}', [BloodRequestController::class, 'reject']);
