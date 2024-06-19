@@ -38,7 +38,9 @@ class StockController extends Controller
 
     public function getSelfStock()
     {
-        $stock = BloodStock::where('hf_id', auth()->user()->id)->get();
+        $stock = BloodStock::where('hf_id', auth()->user()->id)
+        ->doesntHave('blood_usages')
+        ->get();
         return response()->json($stock);
     }
 }

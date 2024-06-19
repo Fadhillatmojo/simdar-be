@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum'])->group(
 
         Route::get('/darah', [StockController::class, 'getAllStock']);
         Route::get('/darah/{id}', [StockController::class, 'getStockById']);
-        Route::get('/darah/faskes', [StockController::class, 'getSelfStock']);
+        Route::get('/darah-faskes', [StockController::class, 'getSelfStock']);
 
         Route::get('/donor', [DonorsController::class, 'getDonors']);
         Route::get('/donor/{id}', [DonorsController::class, 'getDonorById']);

@@ -20,7 +20,10 @@ class BloodRequestController extends Controller
     public function index()
     {
         try {
-            $blood_requests = BloodRequest::all(); //kasih id user yg login
+            $user_id = auth()->user()->id;
+
+            $blood_requests = BloodRequest::select('blood_request')
+            ->where('responder_hf_id', '=', $user_id); //kasih id user yg login
             return response()->json([
                 'status' => 'Success',
                 'message' => 'Data berhasil terambil',
